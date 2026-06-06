@@ -1,5 +1,6 @@
 import { useParams, Link } from 'react-router-dom'
 import useFetch from '../hooks/useFetch'
+import { API_URL } from '../config/api'
 import { FaHeart, FaRegComment, FaArrowLeft, FaImage } from 'react-icons/fa'
 
 const formatDate = (iso) => {
@@ -31,7 +32,7 @@ const Avatar = ({ id, size = 'md' }) => {
 
 const Post = () => {
     const { postId } = useParams()
-    const url = `http://localhost:8000/posts/${postId}`
+    const url = `${API_URL}/posts/${postId}`
     const { loading, data, error } = useFetch(url)
 
     if (loading) {
@@ -93,8 +94,31 @@ const Post = () => {
                         </p>
                     </div>
 
-                    <div className="aspect-square bg-gradient-to-br from-orange-400 via-pink-500 to-purple-600 flex items-center justify-center">
-                        <FaImage className="w-20 h-20 text-white/30" />
+                    <div className="relative bg-black">
+                        {data.images?.length > 0 ? (
+                            data.images.length === 1 ? (
+                                <img
+                                    src={data.images[0].url}
+                                    alt={data.description}
+                                    className="w-full aspect-square object-cover"
+                                />
+                            ) : (
+                                <div className="flex overflow-x-auto snap-x snap-mandatory scrollbar-hide">
+                                    {data.images.map((image) => (
+                                        <img
+                                            key={image.id}
+                                            src={image.url}
+                                            alt={data.description}
+                                            className="w-full shrink-0 snap-center aspect-square object-cover"
+                                        />
+                                    ))}
+                                </div>
+                            )
+                        ) : (
+                            <div className="aspect-square bg-gradient-to-br from-orange-400 via-pink-500 to-purple-600 flex items-center justify-center">
+                                <FaImage className="w-20 h-20 text-white/30" />
+                            </div>
+                        )}
                     </div>
 
                     <div className="p-4 space-y-2">

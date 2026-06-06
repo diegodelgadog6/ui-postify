@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import useFetch from '../hooks/useFetch'
+import { API_URL } from '../config/api'
 import { CiHome, CiSearch } from "react-icons/ci";
 import { CgProfile } from "react-icons/cg";
 import { FaRegPaperPlane, FaImage, FaHeart, FaRegComment } from "react-icons/fa";
@@ -9,7 +10,7 @@ import { MdOutlineSmartDisplay } from "react-icons/md";
 
 const Profile = () => {
     const { userId } = useParams()
-    const urlPosts = `http://localhost:8000/users/${userId}/posts`
+    const urlPosts = `${API_URL}/users/${userId}/posts`
     const { loading, data, error } = useFetch(urlPosts)
 
     console.log(data);
@@ -36,7 +37,7 @@ const Profile = () => {
         })
 
         try {
-            const res = await fetch('http://localhost:8000/posts/', {
+            const res = await fetch(`${API_URL}/posts/`, {
                 method: 'POST',
                 body: formData
             })
@@ -102,35 +103,43 @@ const Profile = () => {
                 )}
 
                 {!loading && data.length > 0 && (
-                    <div className="grid grid-cols-3 gap-1 md:gap-4">
-                        {data.map((post) => (
-                            <Link
-                                key={post.id}
-                                to={`/posts/${post.id}`}
-                                className="group relative aspect-square overflow-hidden bg-gradient-to-br from-orange-400 via-pink-500 to-purple-600 rounded-sm md:rounded-lg cursor-pointer"
-                            >
-                                <div className="absolute inset-0 flex items-center justify-center">
-                                    <FaImage className="w-10 h-10 text-white/40" />
-                                </div>
+                    <div className="grid grid-cols-3 gap-1 md:gap-0.5">
+                        {data.map((post) => {
+                            const coverUrl = post.images?.[0]?.url
 
-                                <div className="absolute top-2 left-2 right-2 bg-black/40 backdrop-blur-sm rounded px-2 py-1 text-[10px] text-white font-mono truncate">
-                                    {post.id}
-                                </div>
-
-                                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/50 transition-colors duration-200 flex items-center justify-center">
-                                    <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center gap-4 text-white font-semibold">
-                                        <div className="flex items-center gap-1">
-                                            <FaHeart className="w-4 h-4" />
-                                            <span>{post.likes_count ?? 0}</span>
+                            return (
+                                <Link
+                                    key={post.id}
+                                    to={`/posts/${post.id}`}
+                                    className="group relative aspect-square overflow-hidden bg-gray-200 cursor-pointer"
+                                >
+                                    {coverUrl ? (
+                                        <img
+                                            src={coverUrl}
+                                            alt={post.description}
+                                            className="absolute inset-0 w-full h-full object-cover"
+                                        />
+                                    ) : (
+                                        <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-orange-400 via-pink-500 to-purple-600">
+                                            <FaImage className="w-10 h-10 text-white/40" />
                                         </div>
-                                        <div className="flex items-center gap-1">
-                                            <FaRegComment className="w-4 h-4" />
-                                            <span>{post.comments_count ?? 0}</span>
+                                    )}
+
+                                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors duration-200 flex items-center justify-center">
+                                        <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center gap-5 text-white font-semibold text-sm">
+                                            <div className="flex items-center gap-1.5">
+                                                <FaHeart className="w-5 h-5" />
+                                                <span>{post.likes_count ?? 0}</span>
+                                            </div>
+                                            <div className="flex items-center gap-1.5">
+                                                <FaRegComment className="w-5 h-5" />
+                                                <span>{post.comments_count ?? 0}</span>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </Link>
-                        ))}
+                                </Link>
+                            )
+                        })}
                     </div>
                 )}
 
