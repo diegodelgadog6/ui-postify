@@ -1,16 +1,57 @@
-# React + Vite
+# Postify
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Red social de publicaciones con imágenes, al estilo Instagram. Este repositorio contiene la interfaz en React. La API está en [Server-Postify](https://github.com/diegodelgadog6/Server-Postify).
 
-Currently, two official plugins are available:
+**Demo:** https://postify.diegodelgadogontes.com/profile/e4f72569-8304-4167-882c-c06d6b34da91
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Funcionalidades
 
-## React Compiler
+- **Perfil** (`/profile/:userId`): cuadrícula con las publicaciones del usuario, con su número de likes y comentarios.
+- **Subir publicaciones**: el perfil incluye un formulario para publicar una o varias imágenes, que la API guarda en Cloudinary.
+- **Detalle de publicación** (`/posts/:postId`): imágenes, descripción, likes y comentarios.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Tecnologías
 
-## Expanding the ESLint configuration
+React 19 · Vite · Tailwind CSS 4 · React Router 7 · React Icons · Vercel
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Estructura
+
+```text
+src/
+  main.jsx           Rutas de la aplicación
+  config/api.js      URL base de la API
+  hooks/useFetch.jsx Hook para peticiones GET
+  views/
+    Profile.jsx      Perfil y formulario de publicación
+    Post.jsx         Detalle de una publicación
+    Home.jsx         Inicio (en construcción)
+```
+
+## Desarrollo local
+
+Requiere Node.js 20 o superior y la [API](https://github.com/diegodelgadog6/Server-Postify) corriendo.
+
+```bash
+npm install
+cp .env.example .env
+npm run dev
+```
+
+La app queda en http://localhost:5173. La URL de la API se configura en `.env`:
+
+```bash
+VITE_API_URL=http://localhost:8000
+```
+
+## Scripts
+
+| Comando | Descripción |
+| --- | --- |
+| `npm run dev` | Servidor de desarrollo |
+| `npm run build` | Build de producción en `dist/` |
+| `npm run preview` | Sirve el build localmente |
+| `npm run lint` | Ejecuta ESLint |
+
+## Autor
+
+**Diego Alejandro Delgado Gontes** · [GitHub](https://github.com/diegodelgadog6) · [Portafolio](https://diegodelgadogontes.com)
